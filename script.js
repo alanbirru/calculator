@@ -10,6 +10,7 @@ let equalBtn = document.querySelector(".equal");
 let num = "";
 let nums = [];
 let operator;
+let operatorDisplay;
 
 // operating functions
 add = (a, b) => {
@@ -40,7 +41,12 @@ function operate(number1, number2, operator) {
     return divide(number1, number2);
   }
 }
-
+function clear() {
+  display.textContent = "";
+  nums = [];
+  num = "";
+  displayTotal.textContent = "0";
+}
 // function for event listeners operators
 function operatorFunction(op) {
   nums.push(Number(num));
@@ -57,11 +63,14 @@ function operatorFunction(op) {
     // }
     nums = [operate(nums[0], nums[1], operator)];
     displayTotal.textContent = nums[0];
+    display.textContent = `${operatorDisplay} `;
   }
   num = "";
   operator = op;
   // nums.push("+");
-
+  if (nums[0] === Infinity) {
+    clear();
+  }
   console.log(nums);
 }
 
@@ -70,6 +79,8 @@ let btns = document.querySelectorAll(".numbers");
 for (let i = 0; i < btns.length; i++) {
   btns[i].addEventListener("click", function () {
     display.textContent += btns[i].textContent;
+    console.log(display.textContent);
+
     // on click put number on num
     if (btns[i].textContent === "0") {
       num += "0";
@@ -91,35 +102,37 @@ for (let i = 0; i < btns.length; i++) {
       num += "8";
     } else if (btns[i].textContent === "9") {
       num += "9";
+    } else if (btns[i].textContent === ".") {
+      num += ".";
     }
 
     console.log(num);
   });
 }
+
 // clear event
 clearBtn.addEventListener("click", function () {
-  display.textContent = "";
-  nums = [];
-  num = "";
-  displayTotal.textContent = "0";
+  clear();
 });
 
 // add event
 addBtn.addEventListener("click", function () {
+  operatorDisplay = "+";
   operatorFunction("+");
-  // let sums = nums.reduce((x, b) => x + b);
-  // console.log(sums);
 });
 
 subtractBtn.addEventListener("click", function () {
+  operatorDisplay = "-";
   operatorFunction("-");
 });
 
 multiplyBtn.addEventListener("click", function () {
+  operatorDisplay = "*";
   operatorFunction("*");
 });
 
 divideBtn.addEventListener("click", function () {
+  operatorDisplay = "/";
   operatorFunction("/");
 });
 
@@ -128,6 +141,12 @@ equalBtn.addEventListener("click", function () {
   nums.push(Number(num));
   nums = [operate(nums[0], nums[1], operator)];
   displayTotal.textContent = nums[0];
+
   console.log(nums);
   num = "0";
+  // when divided by 0
+  if (nums[0] == Infinity) {
+    alert("you can not divide it by 0");
+    clear();
+  }
 });
